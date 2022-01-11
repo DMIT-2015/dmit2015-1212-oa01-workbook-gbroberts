@@ -1,5 +1,5 @@
 # DMIT2015 Basic Starter Kit
 
-## Owner your name
+## Owner Graham Roberts
 
-alter this statement to indicate the usage of this repository
+This repository will serve as a workbook for all my DMIT2015 Enterprise Development demos.
