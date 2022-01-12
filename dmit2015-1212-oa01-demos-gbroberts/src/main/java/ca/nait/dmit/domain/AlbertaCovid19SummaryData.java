@@ -8,7 +8,7 @@ import java.time.LocalDate;
 public class AlbertaCovid19SummaryData {
     // Define data field for each column in the CSV file
     private int id;
-    private LocalDate date;
+    private LocalDate dateReported;
     private int numberOfLabTests;
     private int cumulativeNumberOfLabTests;
     private int numberOfCases;
