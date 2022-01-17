@@ -16,15 +16,20 @@ public class AlbertaCovid19SummaryDataService {
     private List<AlbertaCovid19SummaryData> dataList = new ArrayList<>();
 
     public AlbertaCovid19SummaryDataService() throws IOException {
+        dataList = loadCsvData();
+    }
+
+    private List<AlbertaCovid19SummaryData> loadCsvData() throws IOException {
+        List<AlbertaCovid19SummaryData> dataList = new ArrayList<>();
         try (var reader = new BufferedReader(new InputStreamReader(
-                getClass().getResourceAsStream("/data/covid-19-alberta-statistics-summary-data.csv")))){
+                getClass().getResourceAsStream("/data/covid-19-alberta-statistics-summary-data.csv")))) {
             final var delimiter = ",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)";
             String line;
             // Skip the first line as it contains column headings
             reader.readLine();
             var dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             // Read one line at time from the input stream
-            while( (line = reader.readLine()) != null) {
+            while ((line = reader.readLine()) != null) {
                 String[] values = line.split(delimiter, -1); // The -1 limit allows for any number of fields and not discard trailing empty fields
                 // Column order of fields:
                 // 0 - "ID"
@@ -42,7 +47,7 @@ public class AlbertaCovid19SummaryDataService {
                 // 12 -"Percent positivity"
                 // Create an object for from each row in the file
                 AlbertaCovid19SummaryData lineData = new AlbertaCovid19SummaryData();
-                lineData.setId(Integer.parseInt(values[0].replaceAll("\"","")));
+                lineData.setId(Integer.parseInt(values[0].replaceAll("\"", "")));
                 lineData.setDateReported(LocalDate.parse(values[1], dateFormatter));
                 lineData.setNumberOfLabTests(Integer.parseInt(values[2]));
                 lineData.setCumulativeNumberOfLabTests(Integer.parseInt(values[3]));
@@ -59,6 +64,7 @@ public class AlbertaCovid19SummaryDataService {
                 // Add lineData to dataList
                 dataList.add(lineData);
             }
+            return dataList;
         }
     }
 }
