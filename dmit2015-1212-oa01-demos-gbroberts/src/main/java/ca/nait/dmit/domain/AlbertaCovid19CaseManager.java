@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class AlbertaCovid19CaseManager {
 
@@ -73,5 +74,32 @@ public class AlbertaCovid19CaseManager {
             }
             return dataList;
         }
+    }
+
+    public long countTotalActiveCases() {
+        return albertaCovid19CaseList
+                .stream()
+                .filter(item -> item.getCaseStatus().equalsIgnoreCase("Active"))
+                .count();
+    }
+
+    public long countActiveCasesByAhsZone(String ahsZone) {
+        return albertaCovid19CaseList
+                .stream()
+//                .filter(item -> item.getAhsZone().equalsIgnoreCase(ahsZone)
+//                    && item.getCaseStatus().equalsIgnoreCase("Active"))
+                .filter(item -> item.getCaseStatus().equalsIgnoreCase("Active"))
+                .filter(item -> item.getAhsZone().equalsIgnoreCase(ahsZone))
+                .count();
+    }
+
+    public List<String> distinctAhsZones() {
+        return albertaCovid19CaseList
+                .stream()
+                .map(item -> item.getAhsZone())
+                .distinct()
+                .filter(item -> item.isEmpty() == false)
+                .sorted()
+                .collect(Collectors.toList());
     }
 }
