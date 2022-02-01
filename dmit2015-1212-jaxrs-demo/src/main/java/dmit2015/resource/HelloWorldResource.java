@@ -41,10 +41,9 @@ public class HelloWorldResource {
     @GET
     @Produces("text/image")
     public Response helloImage(@Context HttpServletRequest request) {
-//        InputStream is = getClass().getResourceAsStream("/images/hello_world.png");
-        File imageFile = new File("src/main/resources/META-INF/images/hello_world.png");
+        InputStream is = getClass().getResourceAsStream("/images/hello_world.png");
         return Response
-                .ok(imageFile)
+                .ok(is)
                 .header("Content-Disposition","attachment; filename=hello_world.png")
                 .build();
     }
