@@ -257,10 +257,6 @@
     <orderEntry type="library" scope="TEST" name="Maven: org.jboss.spec.javax.rmi:jboss-rmi-api_1.0_spec:1.0.6.Final" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.apache.cxf:cxf-rt-rs-extension-providers:3.4.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.bitbucket.b_c:jose4j:0.7.2" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.eclipse:yasson:1.0.8" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: jakarta.json.bind:jakarta.json.bind-api:1.0.2" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: jakarta.json:jakarta.json-api:1.1.6" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.glassfish:jakarta.json:module:1.1.6" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.glassfish:javax.json:1.1.4" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.testcontainers:junit-jupiter:1.15.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.microshed:microshed-testing-wildfly:0.9.1" level="project" />
@@ -290,5 +286,9 @@
     <orderEntry type="library" scope="TEST" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.13.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.13.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: com.fasterxml.jackson.core:jackson-core:2.13.1" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.eclipse:yasson:2.0.4" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: jakarta.json.bind:jakarta.json.bind-api:2.0.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: jakarta.json:jakarta.json-api:2.0.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.glassfish:jakarta.json:module:2.0.0" level="project" />
   </component>
 </module>
