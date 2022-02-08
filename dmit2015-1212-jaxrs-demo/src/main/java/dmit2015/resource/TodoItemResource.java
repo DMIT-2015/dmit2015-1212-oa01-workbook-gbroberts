@@ -1,7 +1,6 @@
 package dmit2015.resource;
 
 import dmit2015.entity.TodoItem;
-import dmit2015.repository.TodoItemRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;

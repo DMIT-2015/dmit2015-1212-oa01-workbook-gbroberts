@@ -54,8 +54,8 @@ public class TodoItemRepository {
 
     public List<TodoItem> findAll() {
         return em.createQuery(
-                "SELECT ti FROM TodoItem ti"
-                , TodoItem.class)
+                        "SELECT ti FROM TodoItem ti"
+                        , TodoItem.class)
                 .getResultList();
     }
 
