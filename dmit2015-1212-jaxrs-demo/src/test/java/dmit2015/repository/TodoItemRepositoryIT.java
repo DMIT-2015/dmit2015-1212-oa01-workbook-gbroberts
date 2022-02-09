@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class TodoItemRepositoryIT {
 
     @Inject
-    private TodoItemRepository _todoRepository;
+    private TodoItemRepositoryOldStyle _todoRepository;
 
     static TodoItem currentTodoItem;  // the TodoItem that is currently being added, find, update, or delete
 
@@ -44,7 +44,7 @@ class TodoItemRepositoryIT {
                 .addAsLibraries(pomFile.resolve("org.hamcrest:hamcrest:2.2").withTransitivity().asFile())
 //                .addAsLibraries(pomFile.resolve("org.hibernate:hibernate-core-jakarta:5.6.5.Final").withTransitivity().asFile())
                 .addClass(ApplicationConfig.class)
-                .addClasses(TodoItem.class, TodoItemRepository.class)
+                .addClasses(TodoItem.class, TodoItemRepositoryOldStyle.class)
                 .addAsResource("META-INF/persistence.xml")
                 .addAsResource("META-INF/sql/import-data.sql")
                 .addAsWebInfResource(EmptyAsset.INSTANCE,"beans.xml");
