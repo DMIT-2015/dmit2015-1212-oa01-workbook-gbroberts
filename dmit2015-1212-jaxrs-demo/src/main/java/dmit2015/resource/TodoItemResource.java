@@ -5,39 +5,64 @@ import dmit2015.entity.TodoItem;
 import dmit2015.repository.TodoItemRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.persistence.OptimisticLockException;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriInfo;
-
 import java.net.URI;
+import java.util.Optional;
+
+
+/**
+ * * Web API with CRUD methods for managing TodoItem.
+ *
+ *  URI						    Http Method     Request Body		                        Description
+ * 	----------------------      -----------		------------------------------------------- ------------------------------------------
+ *	/webapi/TodoItems			POST			{"name":"Demo DMIT2015 assignment 1",       Create a new TodoItem
+ *                                         	    "complete":false}
+ * 	/webapi/TodoItems/{id}		GET			                                                Find one TodoItem with a id value
+ * 	/webapi/TodoItems		    GET			                                                Find all TodoItem
+ * 	/webapi/TodoItems/{id}      PUT             {"id":5,                                    Update the TodoItem
+ * 	                                            "name":"Submitted DMIT2015 assignment 7",
+ *                                              "complete":true}
+ * 	/webapi/TodoItems/{id}		DELETE			                                            Remove the TodoItem
+ *
+ curl -i -X GET http://localhost:8080/dmit2015-1212-jaxrs-demo/webapi/TodoItems
+ curl -i -X GET http://localhost:8080/dmit2015-1212-jaxrs-demo/webapi/TodoItems/1
+ curl -i -X POST http://localhost:8080//dmit2015-1212-jaxrs-demo/webapi/TodoItems \
+ -d '{"name":"Finish DMIT2015 Assignment 1","complete":false}' \
+ -H 'Content-Type:application/json'
+ curl -i -X GET http://localhost:8080/dmit2015-1212-jaxrs-demo/webapi/TodoItems/4
+ curl -i -X PUT http://localhost:8080/dmit2015-1212-jaxrs-demo/webapi/TodoItems/4 \
+ -d '{"id":4,"name":"Demo DMIT2015 Assignment 1","complete":true}' \
+ -H 'Content-Type:application/json'
+ curl -i -X GET http://localhost:8080/dmit2015-1212-jaxrs-demo/webapi/TodoItems/4
+ curl -i -X DELETE http://localhost:8080/dmit2015-1212-jaxrs-demo/webapi/TodoItems/4
+ curl -i -X GET http://localhost:8080/dmit2015-1212-jaxrs-demo/webapi/TodoItems/4
+ *
+ */
 
 @ApplicationScoped
-@Path("TodoItems")                    // All methods of this class are associated this URL path
-@Consumes(MediaType.APPLICATION_JSON)    // All methods this class accept only JSON format data
-@Produces(MediaType.APPLICATION_JSON)    // All methods returns data that has been converted to JSON format
+// This is a CDI-managed bean that is created only once during the life cycle of the application
+@Path("TodoItems")	        // All methods of this class are associated this URL path
+@Consumes(MediaType.APPLICATION_JSON)	// All methods this class accept only JSON format data
+@Produces(MediaType.APPLICATION_JSON)	// All methods returns data that has been converted to JSON format
 public class TodoItemResource {
 
+    @Context
+    private UriInfo uriInfo;
+
     @Inject
-    private TodoItemRepository _todoItemRepository;
+    private TodoItemRepository todoItemRepository;
 
-    @GET    // This method only accepts HTTP GET requests.
-    public Response listTodoItems() {
-        return Response.ok(_todoItemRepository.list()).build();
-    }
-
-    @Path("{id}")
-    @GET    // This method only accepts HTTP GET requests.
-    public Response findTodoItemById(@PathParam("id") Long todoItemId) {
-        TodoItem existingTodoItem = _todoItemRepository.findOptional(todoItemId).orElseThrow(NotFoundException::new);
-
-        return Response.ok(existingTodoItem).build();
-    }
-
-    @POST    // This method only accepts HTTP POST requests.
-    public Response addTodoItem(TodoItem newTodoItem, @Context UriInfo uriInfo) {
+    @POST   // POST: /webapi/TodoItems
+    public Response postTodoItem(TodoItem newTodoItem) {
+        if (newTodoItem == null) {
+            throw new BadRequestException();
+        }
 
         String errorMessage = BeanValidator.validateBean(TodoItem.class, newTodoItem);
         if (errorMessage != null) {
@@ -48,36 +73,49 @@ public class TodoItemResource {
         }
 
         try {
-            // Persist the new TodoItem into the database
-            _todoItemRepository.create(newTodoItem);
+            todoItemRepository.create(newTodoItem);
         } catch (Exception ex) {
-            // Return a HTTP status of "500 Internal Server Error" containing the exception message
-            return Response.
-                    serverError()
+            ex.printStackTrace();
+            return Response
+                    .serverError()
                     .entity(ex.getMessage())
                     .build();
         }
 
-        // userInfo is injected via @Context parameter to this method
-        URI location = uriInfo.getAbsolutePathBuilder()
-                .path(newTodoItem.getId() + "")
-                .build();
-
-        // Set the location path of the new entity with its identifier
-        // Returns an HTTP status of "201 Created" if the TodoItem was successfully persisted
-        return Response
-                .created(location)
-                .build();
+        URI todoItemsUri = uriInfo.getAbsolutePathBuilder().path(newTodoItem.getId().toString()).build();
+        return Response.created(todoItemsUri).build();
     }
 
-    @PUT            // This method only accepts HTTP PUT requests.
-    @Path("{id}")    // This method accepts a path parameter and gives it a name of id
-    public Response updateTodoItem(@PathParam("id") Long todoItemId, TodoItem updatedTodoItem) {
-        if (!todoItemId.equals(updatedTodoItem.getId())) {
+    @GET    // GET: /webapi/TodoItems/5
+    @Path("{id}")
+    public Response getTodoItem(@PathParam("id") Long id) {
+        Optional<TodoItem> optionalTodoItem = todoItemRepository.findOptional(id);
+
+        if (optionalTodoItem.isEmpty()) {
+            throw new NotFoundException();
+        }
+        TodoItem existingTodoItem = optionalTodoItem.get();
+
+        return Response.ok(existingTodoItem).build();
+    }
+
+    @GET    // GET: /webapi/TodoItems
+    public Response getTodoItems() {
+        return Response.ok(todoItemRepository.list()).build();
+    }
+
+    @PUT    // PUT: /webapi/TodoItems/5
+    @Path("{id}")
+    public Response updateTodoItem(@PathParam("id") Long id, TodoItem updatedTodoItem) {
+        if (!id.equals(updatedTodoItem.getId())) {
             throw new BadRequestException();
         }
 
-        _todoItemRepository.findOptional(todoItemId).orElseThrow(NotFoundException::new);
+        Optional<TodoItem> optionalTodoItem = todoItemRepository.findOptional(id);
+
+        if (optionalTodoItem.isEmpty()) {
+            throw new NotFoundException();
+        }
 
         String errorMessage = BeanValidator.validateBean(TodoItem.class, updatedTodoItem);
         if (errorMessage != null) {
@@ -87,37 +125,39 @@ public class TodoItemResource {
                     .build();
         }
 
+        TodoItem existingTodoItem = optionalTodoItem.get();
+        existingTodoItem.setName(updatedTodoItem.getName());
+        existingTodoItem.setComplete(updatedTodoItem.isComplete());
+        existingTodoItem.setVersion(updatedTodoItem.getVersion());
+
         try {
-            _todoItemRepository.update(updatedTodoItem);
-        } catch (Exception ex) {
-            // Return an HTTP status of "500 Internal Server Error" containing the exception message
-            return Response.
-                    serverError()
-                    .entity(ex.getMessage())
+            todoItemRepository.update(existingTodoItem);
+        } catch (OptimisticLockException ex) {
+//            throw new BadRequestException("Data has been updated since last fetch request. Do another fetch request to get the new data.");
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity("You are trying to update a record that has changed since you fetch it.")
+                    .build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.serverError()
+                    .entity(e.getMessage())
                     .build();
         }
-
-        // Returns an HTTP status "204 No Content" if the TodoItem was successfully persisted
-        return Response.noContent().build();
+        return Response.ok(updatedTodoItem).build();
     }
 
-    @DELETE            // This method only accepts HTTP DELETE requests.
-    @Path("{id}")    // This method accepts a path parameter and gives it a name of id
-    public Response delete(@PathParam("id") Long todoItemId) {
+    @DELETE // DELETE: /webapi/TodoItems/5
+    @Path("{id}")
+    public Response deleteTodoItem(@PathParam("id") Long id) {
+        Optional<TodoItem> optionalTodoItem = todoItemRepository.findOptional(id);
 
-        _todoItemRepository.findOptional(todoItemId).orElseThrow(NotFoundException::new);
-
-        try {
-            _todoItemRepository.delete(todoItemId);    // Removes the TodoItem from being persisted
-        } catch (Exception ex) {
-            // Return a HTTP status of "500 Internal Server Error" containing the exception message
-            return Response
-                    .serverError()
-                    .encoding(ex.getMessage())
-                    .build();
+        if (optionalTodoItem.isEmpty()) {
+            throw new NotFoundException();
         }
 
-        // Returns an HTTP status "204 No Content" if the TodoItem was successfully deleted
+        todoItemRepository.delete(id);
+
         return Response.noContent().build();
     }
 
