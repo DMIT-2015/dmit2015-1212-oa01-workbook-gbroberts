@@ -8,7 +8,6 @@ import java.util.Collection;
 @Entity
 @Table(name = "EMPLOYEES", schema = "HR", catalog = "")
 public class EmployeesEntity {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "EMPLOYEE_ID")
     private Integer employeeId;

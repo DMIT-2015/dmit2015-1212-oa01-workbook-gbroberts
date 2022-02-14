@@ -7,7 +7,6 @@ import java.util.Collection;
 @Entity
 @Table(name = "DEPARTMENTS", schema = "HR", catalog = "")
 public class DepartmentsEntity {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "DEPARTMENT_ID")
     private Short departmentId;

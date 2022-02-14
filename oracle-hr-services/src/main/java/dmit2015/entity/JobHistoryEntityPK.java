@@ -11,11 +11,9 @@ import java.sql.Date;
 public class JobHistoryEntityPK implements Serializable {
     @Column(name = "EMPLOYEE_ID")
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer employeeId;
     @Column(name = "START_DATE")
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Date startDate;
 
     public Integer getEmployeeId() {

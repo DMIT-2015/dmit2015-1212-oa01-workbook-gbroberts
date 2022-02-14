@@ -8,11 +8,9 @@ import java.sql.Date;
 @Table(name = "JOB_HISTORY", schema = "HR", catalog = "")
 @IdClass(JobHistoryEntityPK.class)
 public class JobHistoryEntity {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "EMPLOYEE_ID")
     private Integer employeeId;
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "START_DATE")
     private Date startDate;
