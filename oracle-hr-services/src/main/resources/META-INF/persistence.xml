@@ -60,7 +60,7 @@
     <!--        </properties>-->
     <!--    </persistence-unit>-->
 
-            <persistence-unit name="oracle-jpa-user2015-pu" transaction-type="JTA">
+            <persistence-unit name="oracle-jpa-hr-pu" transaction-type="JTA">
                 <jta-data-source>java:app/datasources/oracleHrDs</jta-data-source>
 
                 <properties>
