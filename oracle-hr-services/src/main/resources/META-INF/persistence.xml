@@ -60,35 +60,53 @@
     <!--        </properties>-->
     <!--    </persistence-unit>-->
 
-            <persistence-unit name="oracle-jpa-hr-pu" transaction-type="JTA">
-                <jta-data-source>java:app/datasources/oracleHrDs</jta-data-source>
-                <class>dmit2015.entity.CountriesEntity</class>
-                <class>dmit2015.entity.DepartmentsEntity</class>
-                <class>dmit2015.entity.EmployeesEntity</class>
-                <class>dmit2015.entity.JobsEntity</class>
-                <class>dmit2015.entity.JobHistoryEntity</class>
-                <class>dmit2015.entity.LocationsEntity</class>
-                <class>dmit2015.entity.RegionsEntity</class>
-                <class>dmit2015.entity.EmpDetailsViewEntity</class>
+<!--            <persistence-unit name="oracle-jpa-hr-pu" transaction-type="JTA">-->
+<!--                <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>-->
+<!--                <jta-data-source>java:app/datasources/oracleHrDs</jta-data-source>-->
 
-                <properties>
-                    <property name="hibernate.dialect" value="org.hibernate.dialect.Oracle12cDialect"/>
-                    <property name="jakarta.persistence.jdbc.driver" value="oracle.jdbc.driver.OracleDriver" />
-                    <property name="jakarta.persistence.jdbc.url" value="jdbc:oracle:thin:@localhost:1521/xepdb1" />
-                    <property name="jakarta.persistence.jdbc.user" value="HR" />
-                    <property name="jakarta.persistence.jdbc.password" value="Password2015" />
+<!--                <properties>-->
+<!--                    <property name="hibernate.dialect" value="org.hibernate.dialect.Oracle12cDialect"/>-->
+<!--                    <property name="jakarta.persistence.jdbc.driver" value="oracle.jdbc.driver.OracleDriver" />-->
+<!--                    <property name="jakarta.persistence.jdbc.url" value="jdbc:oracle:thin:@localhost:1521/xepdb1" />-->
+<!--                    <property name="jakarta.persistence.jdbc.user" value="HR" />-->
+<!--                    <property name="jakarta.persistence.jdbc.password" value="Password2015" />-->
 
-                    <property name="jakarta.persistence.schema-generation.database.action" value="none"/>
-                    <property name="toplink.jdbc.url" value="jdbc:oracle:thin:@//localhost:1521/XEPDB1"/>
-                    <property name="toplink.jdbc.driver" value="oracle.jdbc.OracleDriver"/>
-                    <property name="hibernate.connection.url" value="jdbc:oracle:thin:@//localhost:1521/XEPDB1"/>
-                    <property name="hibernate.connection.driver_class" value="oracle.jdbc.OracleDriver"/>
-                    <property name="openjpa.ConnectionURL" value="jdbc:oracle:thin:@//localhost:1521/XEPDB1"/>
-                    <property name="openjpa.ConnectionDriverName" value="oracle.jdbc.OracleDriver"/>
-                    <property name="eclipselink.jdbc.url" value="jdbc:oracle:thin:@//localhost:1521/XEPDB1"/>
-                    <property name="eclipselink.jdbc.driver" value="oracle.jdbc.OracleDriver"/>
-                </properties>
-            </persistence-unit>
+<!--                    <property name="jakarta.persistence.schema-generation.database.action" value="none"/>-->
+<!--                    <property name="toplink.jdbc.url" value="jdbc:oracle:thin:@//localhost:1521/XEPDB1"/>-->
+<!--                    <property name="toplink.jdbc.driver" value="oracle.jdbc.OracleDriver"/>-->
+<!--                    <property name="hibernate.connection.url" value="jdbc:oracle:thin:@//localhost:1521/XEPDB1"/>-->
+<!--                    <property name="hibernate.connection.driver_class" value="oracle.jdbc.OracleDriver"/>-->
+<!--                    <property name="openjpa.ConnectionURL" value="jdbc:oracle:thin:@//localhost:1521/XEPDB1"/>-->
+<!--                    <property name="openjpa.ConnectionDriverName" value="oracle.jdbc.OracleDriver"/>-->
+<!--                    <property name="eclipselink.jdbc.url" value="jdbc:oracle:thin:@//localhost:1521/XEPDB1"/>-->
+<!--                    <property name="eclipselink.jdbc.driver" value="oracle.jdbc.OracleDriver"/>-->
+<!--                </properties>-->
+<!--            </persistence-unit>-->
+
+        <persistence-unit name="oracle-jpa-hr-pu" transaction-type="JTA">
+            <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+            <jta-data-source>java:app/datasources/oracleHrDS</jta-data-source>
+            <class>dmit2015.entity.CountriesEntity</class>
+            <class>dmit2015.entity.DepartmentsEntity</class>
+            <class>dmit2015.entity.EmployeesEntity</class>
+            <class>dmit2015.entity.JobsEntity</class>
+            <class>dmit2015.entity.JobHistoryEntity</class>
+            <class>dmit2015.entity.LocationsEntity</class>
+            <class>dmit2015.entity.RegionsEntity</class>
+            <class>dmit2015.entity.EmpDetailsViewEntity</class>
+
+            <properties>
+                <property name="hibernate.dialect" value="org.hibernate.dialect.Oracle12cDialect"/>
+                <property name="jakarta.persistence.jdbc.driver" value="oracle.jdbc.driver.OracleDriver" />
+                <property name="jakarta.persistence.jdbc.url" value="jdbc:oracle:thin:@localhost:1521/xepdb1" />
+                <property name="jakarta.persistence.jdbc.user" value="HR" />
+                <property name="jakarta.persistence.jdbc.password" value="Password2015" />
+                <property name="hibernate.connection.url" value="jdbc:oracle:thin:@//localhost:1521/XEPDB1"/>
+                <property name="hibernate.connection.driver_class" value="oracle.jdbc.OracleDriver"/>
+
+            </properties>
+        </persistence-unit>
+
 
     <!--    <persistence-unit name="postgresql-jpa-pu" transaction-type="JTA">-->
     <!--        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>-->
