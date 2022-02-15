@@ -85,7 +85,7 @@
 
         <persistence-unit name="oracle-jpa-hr-pu" transaction-type="JTA">
             <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-            <jta-data-source>java:app/datasources/oracleHrDS</jta-data-source>
+            <jta-data-source>java:app/datasources/oracleHrDs</jta-data-source>
             <class>dmit2015.entity.CountriesEntity</class>
             <class>dmit2015.entity.DepartmentsEntity</class>
             <class>dmit2015.entity.EmployeesEntity</class>

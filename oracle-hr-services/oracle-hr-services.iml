@@ -18,7 +18,9 @@
         <datasource-mapping>
           <factory-entry name="oracle-jpa-hr-pu" value="092b2c5a-0028-4ce3-9801-dbc5820cbb6a" />
         </datasource-mapping>
-        <naming-strategy-map />
+        <naming-strategy-map>
+          <unit-entry name="oracle-jpa-hr-pu" />
+        </naming-strategy-map>
         <deploymentDescriptor name="persistence.xml" url="file://$MODULE_DIR$/src/main/resources/META-INF/persistence.xml" />
       </configuration>
     </facet>

@@ -10,7 +10,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 		name="java:app/datasources/oracleHrDs",
 		className="oracle.jdbc.xa.client.OracleXADataSource",
 		url="jdbc:oracle:thin:@localhost:1521/xepdb1",
-		user="hr",
+		user="HR",
 		password="Password2015"),
 
 })
