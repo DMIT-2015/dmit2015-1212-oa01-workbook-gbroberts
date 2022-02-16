@@ -1,11 +1,12 @@
 package dmit2015.resource;
 
 import common.validator.BeanValidator;
-import dmit2015.entity.JobsEntity;
-import dmit2015.repository.JobsEntityRepository;
+import dmit2015.entity.EmployeesEntity;
+import dmit2015.dto.EmployeesEntityDto;
+import dmit2015.mapper.EmployeesEntityMapper;
+import dmit2015.repository.EmployeesEntityRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import jakarta.persistence.OptimisticLockException;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
@@ -13,33 +14,42 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriInfo;
 
 import java.net.URI;
+import java.util.stream.Collectors;
 
 @ApplicationScoped
-@Path("JobsEntitys")                    // All methods of this class are associated this URL path
+@Path("EmployeesEntityDtos")                    // All methods of this class are associated this URL path
 @Consumes(MediaType.APPLICATION_JSON)    // All methods this class accept only JSON format data
 @Produces(MediaType.APPLICATION_JSON)    // All methods returns data that has been converted to JSON format
-public class JobsEntityResource {
+public class EmployeesEntityDtoResource {
 
     @Inject
-    private JobsEntityRepository _jobsEntityRepository;
+    private EmployeesEntityRepository _employeesEntityRepository;
 
     @GET    // This method only accepts HTTP GET requests.
-    public Response listJobsEntitys() {
-        return Response.ok(_jobsEntityRepository.list()).build();
+    public Response listEmployeesEntitys() {
+        return Response.ok(
+                _employeesEntityRepository
+                        .list()
+                        .stream()
+                        .map(EmployeesEntityMapper.INSTANCE::toDto)
+                        .collect(Collectors.toList())
+        ).build();
     }
 
     @Path("{id}")
     @GET    // This method only accepts HTTP GET requests.
-    public Response findJobsEntityById(@PathParam("id") Long jobsEntityId) {
-        JobsEntity existingJobsEntity = _jobsEntityRepository.findOptional(jobsEntityId).orElseThrow(NotFoundException::new);
+    public Response findEmployeesEntityById(@PathParam("id") Integer employeesEntityId) {
+        EmployeesEntity existingEmployeesEntity = _employeesEntityRepository.findOptional(employeesEntityId).orElseThrow(NotFoundException::new);
 
-        return Response.ok(existingJobsEntity).build();
+        EmployeesEntityDto dto = EmployeesEntityMapper.INSTANCE.toDto(existingEmployeesEntity);
+
+        return Response.ok(dto).build();
     }
 
     @POST    // This method only accepts HTTP POST requests.
-    public Response addJobsEntity(JobsEntity newJobsEntity, @Context UriInfo uriInfo) {
-
-        String errorMessage = BeanValidator.validateBean(JobsEntity.class, newJobsEntity);
+    public Response addEmployeesEntity(EmployeesEntityDto dto, @Context UriInfo uriInfo) {
+        EmployeesEntity newEmployeesEntity = EmployeesEntityMapper.INSTANCE.toEntity(dto);
+        String errorMessage = BeanValidator.validateBean(EmployeesEntity.class, newEmployeesEntity);
         if (errorMessage != null) {
             return Response
                     .status(Response.Status.BAD_REQUEST)
@@ -48,8 +58,8 @@ public class JobsEntityResource {
         }
 
         try {
-            // Persist the new JobsEntity into the database
-            _jobsEntityRepository.create(newJobsEntity);
+            // Persist the new EmployeesEntity into the database
+            _employeesEntityRepository.create(newEmployeesEntity);
         } catch (Exception ex) {
             // Return a HTTP status of "500 Internal Server Error" containing the exception message
             return Response.
@@ -60,11 +70,11 @@ public class JobsEntityResource {
 
         // userInfo is injected via @Context parameter to this method
         URI location = uriInfo.getAbsolutePathBuilder()
-                .path(newJobsEntity.getJobId())
+                .path(newEmployeesEntity.getEmployeeId() + "")
                 .build();
 
         // Set the location path of the new entity with its identifier
-        // Returns an HTTP status of "201 Created" if the JobsEntity was successfully persisted
+        // Returns an HTTP status of "201 Created" if the EmployeesEntity was successfully persisted
         return Response
                 .created(location)
                 .build();
@@ -72,12 +82,15 @@ public class JobsEntityResource {
 
     @PUT            // This method only accepts HTTP PUT requests.
     @Path("{id}")    // This method accepts a path parameter and gives it a name of id
-    public Response updateJobsEntity(@PathParam("id") String id, JobsEntity updatedJobsEntity) {
-        if (!id.equals(updatedJobsEntity.getJobId())) {
+    public Response updateEmployeesEntity(@PathParam("id") Integer employeesEntityId, EmployeesEntityDto dto) {
+        if (!employeesEntityId.equals(dto.getEmployeeId())) {
             throw new BadRequestException();
         }
 
-        String errorMessage = BeanValidator.validateBean(JobsEntity.class, updatedJobsEntity);
+        _employeesEntityRepository.findOptional(employeesEntityId).orElseThrow(NotFoundException::new);
+        EmployeesEntity existingEmployeesEntity = EmployeesEntityMapper.INSTANCE.toEntity(dto);
+
+        String errorMessage = BeanValidator.validateBean(EmployeesEntity.class, existingEmployeesEntity);
         if (errorMessage != null) {
             return Response
                     .status(Response.Status.BAD_REQUEST)
@@ -85,21 +98,8 @@ public class JobsEntityResource {
                     .build();
         }
 
-        JobsEntity existingJobsEntity = _jobsEntityRepository
-                .findOptional(id)
-                .orElseThrow(NotFoundException::new);
-        // TODO: copy properties from the updated entity to the existing entity such as copy the version property shown below
-        existingJobsEntity.setJobTitle(updatedJobsEntity.getJobTitle());
-        existingJobsEntity.setMaxSalary(updatedJobsEntity.getMaxSalary());
-        existingJobsEntity.setMinSalary(updatedJobsEntity.getMinSalary());
-
         try {
-            _jobsEntityRepository.update(existingJobsEntity);
-        } catch (OptimisticLockException ex) {
-            return Response
-                    .status(Response.Status.BAD_REQUEST)
-                    .entity("The data you are trying to update has changed since your last read request.")
-                    .build();
+            _employeesEntityRepository.update(existingEmployeesEntity);
         } catch (Exception ex) {
             // Return an HTTP status of "500 Internal Server Error" containing the exception message
             return Response.
@@ -108,20 +108,18 @@ public class JobsEntityResource {
                     .build();
         }
 
-        // Returns an HTTP status "200 OK" and include in the body of the response the object that was updated
-        return Response.ok(existingJobsEntity).build();
+        // Returns an HTTP status "204 No Content" if the EmployeesEntity was successfully persisted
+        return Response.noContent().build();
     }
 
     @DELETE            // This method only accepts HTTP DELETE requests.
     @Path("{id}")    // This method accepts a path parameter and gives it a name of id
-    public Response delete(@PathParam("id") String id) {
+    public Response delete(@PathParam("id") Integer employeesEntityId) {
 
-        JobsEntity existingJobsEntity = _jobsEntityRepository
-                .findOptional(id)
-                .orElseThrow(NotFoundException::new);
+        _employeesEntityRepository.findOptional(employeesEntityId).orElseThrow(NotFoundException::new);
 
         try {
-            _jobsEntityRepository.remove(existingJobsEntity);    // Removes the JobsEntity from being persisted
+            _employeesEntityRepository.delete(employeesEntityId);    // Removes the EmployeesEntity from being persisted
         } catch (Exception ex) {
             // Return a HTTP status of "500 Internal Server Error" containing the exception message
             return Response
@@ -130,7 +128,7 @@ public class JobsEntityResource {
                     .build();
         }
 
-        // Returns an HTTP status "204 No Content" if the JobsEntity was successfully deleted
+        // Returns an HTTP status "204 No Content" if the EmployeesEntity was successfully deleted
         return Response.noContent().build();
     }
 
