@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<job id="batchletEnforcementZoneCentrePoint"
+     xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+     version="1.0">
+
+<!--  job can have properties and you get it through accessing it through _jobContext.getProperties() -->
+    <properties>
+        <property name="input_file" value="/home/user2015/Downloads/Scheduled_Photo_Enforcement_Zone_Centre_Points.csv" />
+    </properties>
+
+    <!--    <listeners>-->
+    <!--        <listener ref="enforcementZoneCentreJobListener" />-->
+    <!--    </listeners>-->
+
+    <step id="step1">
+        <!--
+                <listeners>
+                    <listener ref="itemStepListener" />
+                </listeners>
+        -->
+        <batchlet ref="enforcementZoneCentreBatchlet">
+<!--     Can inject the batch property name when property is in a batchlet    -->
+            <properties>
+                <property name="input_file" value="/home/user2015/Downloads/Scheduled_Photo_Enforcement_Zone_Centre_Points.csv" />
+            </properties>
+        </batchlet>
+    </step>
+
+</job>
