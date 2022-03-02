@@ -1,5 +1,12 @@
 <job id="myJob" xmlns="http://xmlns.jcp.org/xml/ns/javaee" version="1.0">
-    <step id="myStep" >
-
+    <step id="downloadFileStep" >
+        <batchlet ref="downloadCsvFileBatchlet">
+            <properties>
+                <property name="csv_file_uri"
+                          value="https://data.edmonton.ca/api/views/akzz-54k3/rows.csv?accessType=DOWNLOAD"/>
+                <property name="file_download_path"
+                          value="/home/user2015/Downloads"/>
+            </properties>
+        </batchlet>
     </step>
 </job>

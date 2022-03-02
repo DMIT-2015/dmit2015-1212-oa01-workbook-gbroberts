@@ -11,7 +11,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 		className="com.microsoft.sqlserver.jdbc.SQLServerDataSource",
 		url="jdbc:sqlserver://DMIT-Capstone1.ad.sast.ca;databaseName=DMIT2015_1212_A01_groberts14;TrustServerCertificate=true",
 		user="groberts14",
-		password="RemoteDesktop200493791"),
+		password="RemotePassword200493791"),
 })
 
 @ApplicationScoped
