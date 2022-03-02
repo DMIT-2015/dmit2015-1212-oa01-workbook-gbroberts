@@ -1,5 +1,5 @@
 <job id="myJob" xmlns="http://xmlns.jcp.org/xml/ns/javaee" version="1.0">
-    <step id="downloadFileStep" >
+    <step id="downloadFileStep" next="importDataStep">
         <batchlet ref="downloadCsvFileBatchlet">
             <properties>
                 <property name="csv_file_uri"
@@ -8,5 +8,18 @@
                           value="/home/user2015/Downloads"/>
             </properties>
         </batchlet>
+    </step>
+
+    <step id="importDataStep">
+        <chunk item-count="50">
+            <reader ref="enforcementZoneCentreItemReader">
+                <properties>
+                    <property name="input_file"
+                              value="/home/user2015/Downloads/Scheduled_Photo_Enforcement_Zone_Centre_Points.csv"/>
+                </properties>
+            </reader>
+            <processor ref="enforcementZoneCentreItemProcessor"></processor>
+            <writer ref="enforcementZoneCentreItemWriter"></writer>
+        </chunk>
     </step>
 </job>

@@ -12,9 +12,9 @@
             <!--            <property name="hibernate.dialect" value="org.hibernate.dialect.SQLServerDialect"/>-->
             <property name="hibernate.dialect" value="org.hibernate.spatial.dialect.sqlserver.SqlServer2012SpatialDialect"/>
             <property name="jakarta.persistence.jdbc.driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
-            <property name="jakarta.persistence.jdbc.url" value="jdbc:sqlserver://DMIT-Capstone1.ad.sast.ca;databaseName=DMIT2015_1212_A01_groberts14;TrustServerCertificate=true" />
-            <property name="jakarta.persistence.jdbc.user" value="groberts14" />
-            <property name="jakarta.persistence.jdbc.password" value="RemotePassword200493791" />
+<!--            <property name="jakarta.persistence.jdbc.url" value="jdbc:sqlserver://DMIT-Capstone1.ad.sast.ca;databaseName=DMIT2015_1212_A01_groberts14;TrustServerCertificate=true" />-->
+<!--            <property name="jakarta.persistence.jdbc.user" value="groberts14" />-->
+<!--            <property name="jakarta.persistence.jdbc.password" value="RemotePassword200493791" />-->
 
             <property name="jakarta.persistence.schema-generation.database.action" value="drop-and-create"/>
 
