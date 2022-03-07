@@ -19,6 +19,12 @@ public class EnforcementZoneCentreItemReader extends AbstractItemReader {
 
     private BufferedReader _reader;
 
+    private int _itemCount = 0;
+
+    @Inject
+    @BatchProperty(name = "max_result")
+    private int _maxResults;
+
     @Inject
     @BatchProperty(name = "input_file")
     private String _inputFile;
@@ -30,13 +36,21 @@ public class EnforcementZoneCentreItemReader extends AbstractItemReader {
         _reader = new BufferedReader(new FileReader(Paths.get(_inputFile).toFile()));
         // Read the first line to skip the hearer row
         _reader.readLine();
+
+        _itemCount = 0;
     }
 
+    // by default reads every single item in your datasource
     @Override
     public Object readItem() throws Exception {
         try{
             String line = _reader.readLine();
-            return line;
+            _itemCount += 1;
+            if (_maxResults == 0 || _itemCount <= _maxResults) {
+                return line;
+            } else {
+                return null;
+            }
         } catch(Exception ex) {
             ex.printStackTrace();
         }

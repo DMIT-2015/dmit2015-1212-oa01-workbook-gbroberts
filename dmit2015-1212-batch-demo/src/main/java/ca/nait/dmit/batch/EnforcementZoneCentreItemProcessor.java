@@ -3,6 +3,8 @@ package ca.nait.dmit.batch;
 import ca.nait.dmit.entity.EnforcementZoneCentre;
 import jakarta.batch.api.chunk.ItemProcessor;
 import jakarta.inject.Named;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.io.WKTReader;
 
@@ -26,11 +28,19 @@ public class EnforcementZoneCentreItemProcessor implements ItemProcessor {
         currentEnforcementZoneCentre.setLongitude(Double.valueOf(tokens[5]));
 
         // need to add the shape, in this case POINT, to the data because we need to tell it what shape it is
+        //          Some data may have POINT present so no need to add to those data.
         // need to remove the comma as well
-        String wktText = "POINT" + tokens[6].replaceAll("[\",]","");
-        // WKT == Well Known Text
-        Point geoLocation = (org.locationtech.jts.geom.Point) new WKTReader().read(wktText);
-        currentEnforcementZoneCentre.setGeoLocation(geoLocation);
+//        String wktText = "POINT" + tokens[6].replaceAll("[\",]","");
+//        // WKT == Well Known Text
+//        Point geoLocation = (org.locationtech.jts.geom.Point) new WKTReader().read(wktText);
+//        currentEnforcementZoneCentre.setGeoLocation(geoLocation);
+
+        // this is another technique for creating the Point that works well when you already have read longitude and latitude
+        Point geoLocation = new GeometryFactory().createPoint(
+                new Coordinate(
+                        currentEnforcementZoneCentre.getLongitude(), currentEnforcementZoneCentre.getLatitude()
+                )
+        );
 
         return currentEnforcementZoneCentre;
     }
