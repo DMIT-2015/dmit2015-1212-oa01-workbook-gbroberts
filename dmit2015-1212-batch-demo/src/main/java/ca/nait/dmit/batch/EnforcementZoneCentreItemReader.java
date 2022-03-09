@@ -22,7 +22,7 @@ public class EnforcementZoneCentreItemReader extends AbstractItemReader {
     private int _itemCount = 0;
 
     @Inject
-    @BatchProperty(name = "max_result")
+    @BatchProperty(name = "max_results")
     private int _maxResults;
 
     @Inject
