@@ -7,7 +7,8 @@ import jakarta.ejb.Singleton;
 import jakarta.ejb.Startup;
 import jakarta.ejb.Timer;
 import jakarta.inject.Inject;
-import jakarta.mail.MessagingException;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+
 import java.util.logging.Logger;
 
 @Singleton                // Instruct the container to create a single instance of this EJB
@@ -17,14 +18,24 @@ public class AutomaticTimersBean {        // Also known as Calendar-Based Timers
         private Logger _logger = Logger.getLogger(AutomaticTimersBean.class.getName());
 
         /**
-         * Assuming you have define the following entries in your web.xml file
-         *     <env-entry>
-         *         <env-entry-name>ca.dmit2015.config.SYSADMIN_EMAIL</env-entry-name>
-         *         <env-entry-type>java.lang.String</env-entry-type>
-         *         <env-entry-value>yourUsername@yourEmailServer</env-entry-value>
-         *     </env-entry>
+         * Assuming you have define the following entries in your META-INF/microprofile-config.properties file
+         ca.dmit2015.config.SYSADMIN_EMAIL=yourUsername@yourEmailServer
+
+         * This code assumes that this project is configured to use Eclipse Microprofile.
+         * You can add the following to pom.xml to enable Eclipse Microprofile
+
+         <dependency>
+         <groupId>org.eclipse.microprofile</groupId>
+         <artifactId>microprofile</artifactId>
+         <version>5.0</version>
+         <type>pom</type>
+         <scope>provided</scope>
+         </dependency>
+
          */
-        @Resource(name="ca.dmit2015.config.SYSADMIN_EMAIL")
+        // inject the value of the property from microprifle-config.properties
+        @Inject
+        @ConfigProperty(name="ca.dmit2015.config.SYSADMIN_EMAIL", defaultValue = "")
         private String mailToAddress;
 
         @Inject
@@ -33,15 +44,14 @@ public class AutomaticTimersBean {        // Also known as Calendar-Based Timers
         private void sendEmail(Timer timer) {
                 if (!mailToAddress.isBlank()) {
                         String mailSubject = timer.getInfo().toString();
-                        String mailText = String.format("You have a %s on %s %s %s, %s  ",
+                        String mailText = String.format("You have a %s on %s %s, %s  ",
                                 timer.getInfo().toString(),
                                 timer.getSchedule().getDayOfWeek(),
                                 timer.getSchedule().getMonth(),
-                                timer.getSchedule().getDayOfMonth(),
                                 timer.getSchedule().getYear()
                         );
                         try {
-                                // mail.sendTextEmail(mailToAddress, mailSubject, mailText);
+                                 mail.sendTextEmail(mailToAddress, mailSubject, mailText);
                                 _logger.info("Successfully sent email to " + mailToAddress);
                         } catch (Exception e) {
                                 e.printStackTrace();
@@ -50,21 +60,17 @@ public class AutomaticTimersBean {        // Also known as Calendar-Based Timers
                 }
         }
 
-//         @Schedules({
-//                 @Schedule(second = "0", minute ="45", hour = "11", dayOfWeek = "Mon,Wed", month = "Jan-Apr", year = "2022", info ="DMIT2015-OA01 Meeting", persistent = false),
-//                 @Schedule(second = "0", minute ="50", hour = "7", dayOfWeek = "Tue", month = "Jan-Apr", year = "2022", info ="DMIT2015-OA01 Meeting", persistent = false)
-//         })
-//        public void dmit2015SectionOA01ClassNotifiation(Timer timer) {
-//                sendEmail(timer);
-//        }
+         @Schedules({
+                 @Schedule(second = "0", minute ="59", hour = "10", dayOfWeek = "Mon,Wed", month = "Jan-Apr", year = "2022", info ="DMIT2015-OA01 Meeting", persistent = false),
+                 @Schedule(second = "0", minute ="50", hour = "7", dayOfWeek = "Tue", month = "Jan-Apr", year = "2022", info ="DMIT2015-OA01 Meeting", persistent = false)
+         })
+        public void dmit2015SectionOA01ClassNotifiation(Timer timer) {
+                sendEmail(timer);
+        }
 
-//         @Schedule(second = "0", minute ="50", hour = "18", dayOfWeek = "Mon,Wed,Fri", month = "Jan-Apr", year = "2022", info ="DMIT2015-OE01 Meeting", persistent = false)
-//        public void dmit2015SectionOE01ClassNotifiation(Timer timer) {
-//                sendEmail(timer);
-//        }
+        // @Schedule(second = "0", minute ="50", hour = "18", dayOfWeek = "Mon,Wed,Fri", month = "Jan-Apr", year = "2022", info ="DMIT2015-OE01 Meeting", persistent = false)
+        public void dmit2015SectionOE01ClassNotifiation(Timer timer) {
+                sendEmail(timer);
+        }
 
-//        @Schedule(second = "*", minute = "*", hour = "*", persistent = false)
-//        public void helloWorld() {
-//                System.out.println("Hello World from a Timer");
-//        }
 }
