@@ -119,6 +119,7 @@ public class DemoTimersBean {        // Also known as Calendar-Based Timers
                 // print console message for completion
                 _logger.info("Batch job done " + jobId + " FAILED");
                 // send email to notified batch job has failed
+                mail.sendTextEmail(mailToAddress, "Batch Job FAILED", "Batch job failed for " + jobExecution.getJobName());
                 timer.cancel();
             }
         } catch (Exception ex) {
