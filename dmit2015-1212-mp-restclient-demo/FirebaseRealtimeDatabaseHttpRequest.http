@@ -1,0 +1,61 @@
+### Create a new Movie (title, releaseDate, genre, rating, price)
+POST https://dmit2015-1212-fbrt-demo-cb656-default-rtdb.firebaseio.com/movies.json
+Content-Type: application/json
+
+{
+"title":"Dune",
+"releaseDate":"2022-03-29",
+"genre":"Action",
+"rating":"PG-13",
+"price":19.99
+}
+
+### Create a new Movie (title, releaseDate, genre, rating, price)
+POST https://dmit2015-1212-fbrt-demo-cb656-default-rtdb.firebaseio.com/movies.json
+Content-Type: application/json
+
+{
+  "title":"King Richard",
+  "releaseDate":"2022-03-29",
+  "genre":"Comedy",
+  "rating":"PG-13",
+  "price":29.99
+}
+
+### Create a new Movie (title, releaseDate, genre, rating, price)
+POST https://dmit2015-1212-fbrt-demo-cb656-default-rtdb.firebaseio.com/movies.json
+Content-Type: application/json
+
+{
+  "title":"Turning Red",
+  "releaseDate":"2022-03-29",
+  "genre":"Action",
+  "rating":"PG",
+  "price":9.99
+}
+
+### Get All Movies
+GET https://dmit2015-1212-fbrt-demo-cb656-default-rtdb.firebaseio.com/movies.json
+
+### Get One Movie by Key
+GET https://dmit2015-1212-fbrt-demo-cb656-default-rtdb.firebaseio.com/movies/-MzL86zHx6qJZRwKSeLM.json
+
+### Update Movie and change price to 19.98 and genre to action for movie with key -MzL86zHx6qJZRwKSeLM
+PUT https://dmit2015-1212-fbrt-demo-cb656-default-rtdb.firebaseio.com/movies/-MzL86zHx6qJZRwKSeLM.json
+Content-Type: application/json
+
+{
+  "genre": "action",
+  "price": 19.98,
+  "rating": "PG",
+  "releaseDate": "2022-02-21",
+  "title": "Turning Red"
+}
+
+### Patch Movie and change release date to 2021-10-22 for movie with key -MzL86zHx6qJZRwKSeLM
+PATCH https://dmit2015-1212-fbrt-demo-cb656-default-rtdb.firebaseio.com/movies/-MzL86zHx6qJZRwKSeLM.json
+Content-Type: application/json
+
+{
+  "releaseDate": "2021-10-22"
+}
