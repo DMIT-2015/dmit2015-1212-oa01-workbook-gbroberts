@@ -20,7 +20,7 @@ public class WeatherServiceController {
     private WeatherService _weatherService;
 
     @Inject
-    @ConfigProperty(name = "api.openweathermap.org.ApiKey")
+    @ConfigProperty(name = "API_OPENWEATHERMAP_ORG_APIKEY")
     private String _weatherApiKey;
 
     @Getter

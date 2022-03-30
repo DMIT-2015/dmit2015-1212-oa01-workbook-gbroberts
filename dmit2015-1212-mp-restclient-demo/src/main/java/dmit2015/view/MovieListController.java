@@ -1,10 +1,14 @@
 package dmit2015.view;
 
 
+import dmit2015.restclient.GeoLocation;
+import dmit2015.restclient.GeoLocationService;
 import dmit2015.restclient.Movie;
 import dmit2015.restclient.MovieService;
 import lombok.Getter;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
+import org.omnifaces.util.Faces;
 import org.omnifaces.util.Messages;
 
 import jakarta.annotation.PostConstruct;
@@ -25,12 +29,32 @@ public class MovieListController implements Serializable {
     @RestClient
     private MovieService _movieService;
 
+    @Inject
+    @ConfigProperty(name = "IPGEOLOCATION_API")
+    private String ipGeoLocationApiKey;
+
+    @Inject
+    @RestClient
+    private GeoLocationService _geoLocationService;
+
+    private GeoLocation currentGeoLocation;
+
     @Getter
     private Map<String, Movie>  movieMap;
 
     @PostConstruct  // After @Inject is complete
     public void init() {
         try {
+            String remoteIP = Faces.getRemoteAddr();
+            if (remoteIP.equals("127.0.0.1")) {
+                // call location API without ip address
+                currentGeoLocation = _geoLocationService.withoutIPAddress(ipGeoLocationApiKey);
+            } else {
+                // call location API with the ip address
+                currentGeoLocation = _geoLocationService.withIPAddress(ipGeoLocationApiKey, remoteIP);
+            }
+
+
             movieMap = _movieService.list();
         } catch (Exception ex) {
             Messages.addGlobalError(ex.getMessage());
