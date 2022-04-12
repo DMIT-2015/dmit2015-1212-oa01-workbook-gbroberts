@@ -5,6 +5,7 @@ import dmit2015.entity.TodoItem;
 import dmit2015.dto.TodoItemDto;
 import dmit2015.mapper.TodoItemMapper;
 import dmit2015.repository.TodoItemRepository;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
@@ -12,6 +13,7 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriInfo;
+import org.eclipse.microprofile.jwt.JsonWebToken;
 
 import java.net.URI;
 import java.util.stream.Collectors;
@@ -21,6 +23,9 @@ import java.util.stream.Collectors;
 @Consumes(MediaType.APPLICATION_JSON)    // All methods this class accept only JSON format data
 @Produces(MediaType.APPLICATION_JSON)    // All methods returns data that has been converted to JSON format
 public class TodoItemDtoResource {
+
+    @Inject
+    private JsonWebToken _callerPrincipal;
 
     @Inject
     private TodoItemRepository _todoItemRepository;
@@ -46,6 +51,7 @@ public class TodoItemDtoResource {
         return Response.ok(dto).build();
     }
 
+    @RolesAllowed({"Sales","IT"})
     @POST    // This method only accepts HTTP POST requests.
     public Response addTodoItem(TodoItemDto dto, @Context UriInfo uriInfo) {
         TodoItem newTodoItem = TodoItemMapper.INSTANCE.toEntity(dto);
@@ -112,6 +118,7 @@ public class TodoItemDtoResource {
         return Response.noContent().build();
     }
 
+    @RolesAllowed({"IT"})
     @DELETE            // This method only accepts HTTP DELETE requests.
     @Path("{id}")    // This method accepts a path parameter and gives it a name of id
     public Response delete(@PathParam("id") Long todoItemId) {

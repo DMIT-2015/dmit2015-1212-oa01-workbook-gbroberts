@@ -1,20 +1,56 @@
 ### Get all TodoItems
-GET http://localhost:8080/dmit2015-1212-jaxrs-demo/webapi/TodoItems
+GET http://localhost:8080/webapi/TodoItems
 
 ### Get a single TodoItem with an id of 1
-GET http://localhost:8080/dmit2015-1212-jaxrs-demo/webapi/TodoItems/1
+GET http://localhost:8080/webapi/TodoItems/1
+
+### Get a JWT Token for user DLEE using ldap
+POST http://localhost:8080/webapi/jwt/ldapJsonLogin
+Content-Type:application/json
+
+{
+  "username": "DLEE",
+  "password": "Password2015"
+}
+
+### GET a JWT Token for user sales01 using database Jsonlogin
+POST http://localhost:8080/webapi/jwt/jsonLogin
+Content-Type:application/json
+
+{
+  "username": "sales01",
+  "password": "Password2015"
+}
+
+### Post using token. Change tokenForUser01 to retrieved token above
+# curl -i -X POST http://localhost:8080/dmit2015-security-microservices-demo-start/webapi/TodoItems
+#    -d '{"name":"Finish DMIT2015 Assignment 1","complete":false}'
+#    -H 'Authorization: Bearer tokenForUser01'
+#    -H 'Content-Type:application/json'
+POST http://localhost:8080/webapi/TodoItems
+Authorization: Bearer tokenForUser01
+Content-Type: application/json
+
+{
+  "name": "Finish DMIT2015 Assignment 1",
+  "complete": false
+}
+
+###
+
+
 
 ### POST a new TodoItem
-POST http://localhost:8080//dmit2015-1212-jaxrs-demo/webapi/TodoItems
+POST http://localhost:8080/webapi/TodoItems
 Content-Type: application/json
 
 {"name":"Finish DMIT2015 Assignment 2", "complete":false}
 
 ### Get a single TodoItem with an id of 4
-GET http://localhost:8080/dmit2015-1212-jaxrs-demo/webapi/TodoItems/4
+GET http://localhost:8080/webapi/TodoItems/4
 
 ### Update TodoItem with an id of 2 and change name and complete properties.
-PUT http://localhost:8080/dmit2015-1212-jaxrs-demo/webapi/TodoItems/2
+PUT http://localhost:8080/webapi/TodoItems/2
 Content-Type: application/json
 
 {
@@ -25,7 +61,7 @@ Content-Type: application/json
 }
 
 ### Update TodoItem with an id of 4 and change name and complete properties.
-PUT http://localhost:8080/dmit2015-1212-jaxrs-demo/webapi/TodoItems/4
+PUT http://localhost:8080/webapi/TodoItems/4
 Content-Type: application/json
 
 {
@@ -36,7 +72,7 @@ Content-Type: application/json
 }
 
 ### Delete an TodoItem with an id of 2
-DELETE http://localhost:8080/dmit2015-1212-jaxrs-demo/webapi/TodoItems/2
+DELETE http://localhost:8080/webapi/TodoItems/2
 
 ### Delete an TodoItem with an id of 4
-DELETE http://localhost:8080/dmit2015-1212-jaxrs-demo/webapi/TodoItems/4
+DELETE http://localhost:8080/webapi/TodoItems/4

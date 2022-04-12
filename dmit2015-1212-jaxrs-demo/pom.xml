@@ -17,6 +17,21 @@
         <junit.version>5.8.2</junit.version>
     </properties>
     <dependencies>
+
+        <dependency>
+            <groupId>org.eclipse.microprofile</groupId>
+            <artifactId>microprofile</artifactId>
+            <version>5.0</version>
+            <type>pom</type>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.directory.api</groupId>
+            <artifactId>api-all</artifactId>
+            <version>2.0.1</version>
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java -->
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
@@ -190,6 +205,11 @@
             <version>1.4.2.Final</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.nimbusds</groupId>
+            <artifactId>nimbus-jose-jwt</artifactId>
+            <version>9.21</version>
+        </dependency>
 
     </dependencies>
     <build>
@@ -220,6 +240,43 @@
                     </annotationProcessorPaths>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <!-- https://docs.wildfly.org/bootablejar/#wildfly_jar_dev_mode -->
+                <!-- mvn wildfly-jar:dev-watch -->
+                <groupId>org.wildfly.plugins</groupId>
+                <artifactId>wildfly-jar-maven-plugin</artifactId>
+                <version>7.0.0.Final</version>
+                <configuration>
+                    <feature-pack-location>wildfly-preview@maven(org.jboss.universe:community-universe)</feature-pack-location>
+                    <layers>
+                        <!-- https://docs.wildfly.org/26/Bootable_Guide.html#wildfly_layers -->
+                        <layer>jaxrs-server</layer>
+                        <layer>management</layer>
+                        <layer>microprofile-platform</layer>
+                        <layer>jsf</layer>
+<!--                        <layer>ee-security</layer>-->
+<!--                        <layer>undertow-https</layer>-->
+                        <!-- TODO: Add layer for ee-security and undertow-https -->
+                    </layers>
+                    <excluded-layers>
+                        <layer>deployment-scanner</layer>
+                    </excluded-layers>
+                    <plugin-options>
+                        <jboss-fork-embedded>true</jboss-fork-embedded>
+                    </plugin-options>
+                    <!-- TODO: add cli-sessions to run script file to enable EE security-->
+
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>package</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
